@@ -1,13 +1,22 @@
 {
-  "name": "names_for_brazillian",
+  "name": "beautiful-name",
   "version": "1.0.0",
   "main": "dist/index.js",
+  "description": "Formate nomes brasileiros de uma forma simples",
+  "license": "MIT",
+  "author": "im-anderson",
+  "repository": "https://github.com/im-anderson/beautiful-name.git",
   "scripts": {
     "start": "node .",
     "build": "tsc"
   },
-  "license": "MIT",
   "devDependencies": {
     "typescript": "^4.5.4"
-  }
+  },
+  "keywords": [
+    "parsename",
+    "parse-name",
+    "formatar-nome",
+    "nome-bonito"
+  ]
 }

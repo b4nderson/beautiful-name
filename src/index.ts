@@ -1,38 +1,61 @@
-const prepositions = ["E", "DO", "DOS", "DA", "DAS", "DE"];
+import { firsLetterUpperOfEachWord } from "./utils/firsLetterUpperOfEachWord";
+import { removeUselessWhiteSpace } from "./utils/removeUselessWhiteSpace";
 
-export const firsLetterUpperRestLower = (text: string) => {
-  const newText = text.charAt(0).toUpperCase();
-  return newText.substring(1).toLowerCase();
-};
+import * as exceptions from "./exceptions";
 
-const beautifulName = (name: string) => {
-  const separateName = name.split(" ");
+class BeautifulName {
+  public originalName: string;
+  public firstName: string;
+  public lastName: string;
+  public fullName: string;
+  public beautifulName: string;
 
-  const [firstName, ...rest] = separateName;
+  private exceptions = exceptions["br"];
 
-  let finishName = firstName;
+  public constructor(fullName: string) {
+    this.originalName = fullName;
 
-  if (rest.length) {
-    const lastName = rest[rest.length - 1];
+    this.fullName = removeUselessWhiteSpace(fullName);
+    this.fullName = firsLetterUpperOfEachWord(this.fullName);
+    this.fullName = this.firstLetterLowerOfEachException(this.fullName);
 
-    rest.pop();
+    const separateFullName = this.fullName.split(" ");
 
-    if (rest.length) {
-      for (const item of rest) {
-        finishName += prepositions.includes(item.toUpperCase())
-          ? ` ${firsLetterUpperRestLower(item)} `
-          : ` ${firsLetterUpperRestLower(item[0])}. `;
+    const [firstName, ...secondNameToTheRest] = separateFullName;
+
+    this.firstName = firstName;
+    this.beautifulName = this.firstName;
+
+    if (secondNameToTheRest.length) {
+      this.lastName = secondNameToTheRest[secondNameToTheRest.length - 1];
+
+      secondNameToTheRest.pop();
+
+      if (secondNameToTheRest.length) {
+        secondNameToTheRest.forEach((name) => {
+          this.beautifulName += this.exceptions.includes(name.toUpperCase())
+            ? ` ${name.toLocaleLowerCase()}`
+            : ` ${name[0]}.`;
+        });
       }
+
+      this.beautifulName += ` ${this.lastName}`;
     }
-
-    finishName += lastName;
-
-    return finishName;
   }
 
-  return firstName.trim().toLocaleUpperCase();
-};
+  private firstLetterLowerOfEachException(fullName: string): string {
+    const separateFullName = fullName.split(" ");
 
-console.log(beautifulName("Anderson barbosa Soares dos Nascimento"));
+    const newSeparateFullName = separateFullName.map((name) =>
+      this.exceptions.includes(name.toUpperCase())
+        ? name.toLocaleLowerCase()
+        : name
+    );
 
-// export { beautifulName };
+    const newFullName = newSeparateFullName.join(" ");
+
+    return newFullName;
+  }
+}
+
+export { BeautifulName };
